@@ -8,6 +8,11 @@ name: Deploy Content to sentinel-rg-dev [76e61ed1-bd6b-45b2-a9f3-7ac06e0fe5e4]
 #    - '.github/workflows/sentinel-deploy-76e61ed1-bd6b-45b2-a9f3-7ac06e0fe5e4.yml'
 #   2. Append the path to the directory environment variable below
 #       directory: '${{ github.workspace }}/SentinelContent'
+#
+# IMPORTANT: Path exclusions prevent infinite loops by excluding:
+# - .sentinel/** (tracking files)
+# - **/*.csv (CSV tracking files)
+# - .github/workflows/** (workflow files)
 
 on:
   push:
@@ -15,7 +20,8 @@ on:
     paths:
     - '**'
     - '!.github/workflows/**'  # this filter prevents other workflow changes from triggering this workflow
-    - '.github/workflows/sentinel-deploy-76e61ed1-bd6b-45b2-a9f3-7ac06e0fe5e4.yml'
+    - '!.sentinel/**'  # exclude sentinel tracking files to prevent loops
+    - '!**/*.csv'  # exclude CSV files to prevent loops
 
 jobs:
   deploy-content:

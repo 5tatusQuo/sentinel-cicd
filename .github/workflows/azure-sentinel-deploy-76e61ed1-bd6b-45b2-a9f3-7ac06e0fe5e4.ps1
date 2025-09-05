@@ -599,9 +599,8 @@ function TryGetCsvFile {
     if (Test-Path $csvPath) {
         $global:localCsvTablefinal = ReadCsvToTable
         Remove-Item -Path $csvPath
-        git add $csvPath
-        git commit -m "Removed tracking file and moved to new sentinel created branch"
-        git push origin $branchName
+        # Note: Removed git operations that would trigger workflow loops
+        # The tracking file will be managed on the sentinel deployment branch only
     }
 
     $relativeCsvPath = RelativePathWithBackslash $csvPath
